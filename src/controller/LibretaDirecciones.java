@@ -57,8 +57,8 @@ public class LibretaDirecciones extends Application {
     public void muestraVistaPersona(){
         
         //Cargo la vista persona a partir de VistaPersona.fxml
-        FXMLLoader loader = new FXMLLoader();
-        URL location = LibretaDirecciones.class.getResource("../view/VistaPersona.fxml");
+        FXMLLoader loader = new FXMLLoader(); //Necesito inicializarlo para poder cargar el fichero
+        URL location = LibretaDirecciones.class.getResource("../view/vistaPersona.fxml");
         loader.setLocation(location);
         try {
             vistaPersona = loader.load();
@@ -72,6 +72,7 @@ public class LibretaDirecciones extends Application {
     }
     
     //Invoco el método getPrimaryStage para que devuelva mi escenario principal
+    //No es siempre necesario
     public Stage getPrimaryStage() {
         return escenarioPrincipal;
     }
