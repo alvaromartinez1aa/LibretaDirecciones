@@ -5,17 +5,38 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import model.Persona;
+import view.vistaPersonaController;
 
 public class LibretaDirecciones extends Application {
     
+    private ObservableList datosPersona = FXCollections.observableArrayList();
     private Stage escenarioPrincipal;
     private BorderPane layoutPrincipal;
     private AnchorPane vistaPersona;
+    
+    //Datos de ejemplo
+    public LibretaDirecciones(){
+        
+        datosPersona.add(new Persona("Jairo", "García Rincón"));
+        datosPersona.add(new Persona("Juan", "Pérez Martínez"));
+        datosPersona.add(new Persona("Andrea", "Chenier López"));
+        datosPersona.add(new Persona("Emilio", "González Pla"));
+        datosPersona.add(new Persona("Mónica", "de Santos Sánchez"));
+        
+    }
+    
+    //Método para devolver los datos como lista observable de personas
+    public ObservableList getDatosPersona() {
+        return datosPersona;
+    }
     
     @Override
     public void start(Stage escenarioPrincipal) {
@@ -26,8 +47,6 @@ public class LibretaDirecciones extends Application {
         //Establezco el título
         this.escenarioPrincipal.setTitle("Libreta de direcciones");
         
-        //Llamo a dos metodos
-    
         //Inicializo el layout principal
         initLayoutPrincipal();
         
@@ -38,11 +57,11 @@ public class LibretaDirecciones extends Application {
     public void initLayoutPrincipal(){
         
         //Cargo el layout principal a partir de la vista VistaPrincipal.fxml
-       /*Necesario*/ FXMLLoader loader = new FXMLLoader();
-        URL location = LibretaDirecciones.class.getResource("../view/vistaPrincipal.fxml");
-        loader.setLocation(location); //Es decir, toma esta URL
+        FXMLLoader loader = new FXMLLoader();
+        URL location = LibretaDirecciones.class.getResource("../view/VistaPrincipal.fxml");
+        loader.setLocation(location);
         try {
-            layoutPrincipal = loader.load(); //Coge todo de ese archivo
+            layoutPrincipal = loader.load();
         } catch (IOException ex) {
             Logger.getLogger(LibretaDirecciones.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -57,8 +76,8 @@ public class LibretaDirecciones extends Application {
     public void muestraVistaPersona(){
         
         //Cargo la vista persona a partir de VistaPersona.fxml
-        FXMLLoader loader = new FXMLLoader(); //Necesito inicializarlo para poder cargar el fichero
-        URL location = LibretaDirecciones.class.getResource("../view/vistaPersona.fxml");
+        FXMLLoader loader = new FXMLLoader();
+        URL location = LibretaDirecciones.class.getResource("../view/VistaPersona.fxml");
         loader.setLocation(location);
         try {
             vistaPersona = loader.load();
@@ -68,11 +87,14 @@ public class LibretaDirecciones extends Application {
         
         //Añado la vista al centro del layoutPrincipal
         layoutPrincipal.setCenter(vistaPersona);
+        /*Este no tiene nada que ver con el loader de arriba*/
+       
+        vistaPersonaController controller = loader.getController();
+        controller.setLibretaDirecciones(this);
         
     }
     
-    //Invoco el método getPrimaryStage para que devuelva mi escenario principal
-    //No es siempre necesario
+    //Invoco el método getPrimaryStage para que devuelva mi escenario pñrincipal
     public Stage getPrimaryStage() {
         return escenarioPrincipal;
     }
@@ -81,5 +103,5 @@ public class LibretaDirecciones extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
 }
+    
