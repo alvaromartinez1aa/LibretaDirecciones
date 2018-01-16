@@ -8,6 +8,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
+import model.Persona;
 
 public class vistaPersonaController {
     
@@ -59,6 +60,30 @@ public class vistaPersonaController {
 
         //Añado la lista obervable a la tabla
         tablaPersonas.setItems/*Llamar al metodo get datos personas*/(libretaDirecciones.getDatosPersona());
+    }
+    
+    
+    //Muestra los detalles de la persona seleccionada
+    private void mostrarDetallesPersona(Persona persona) {
+        
+        if (persona != null) {
+            //Relleno los labels desde el objeto persona
+            nombreLabel.setText(persona.getNombre());
+            apellidosLabel.setText(persona.getApellidos());
+            direccionLabel.setText(persona.getDireccion());
+            codigoPostalLabel.setText(Integer.toString(persona.getCodigoPostal()));
+            ciudadLabel.setText(persona.getCiudad());
+            //TODO: Tenemos que convertir la fecha de nacimiento en un String 
+            //fechaDeNacimientoLabel.setText(...);
+        } else {
+            //Persona es null, vacío todos los labels.
+            nombreLabel.setText("");
+            apellidosLabel.setText("");
+            direccionLabel.setText("");
+            codigoPostalLabel.setText("");
+            ciudadLabel.setText("");
+            fechaDeNacimientoLabel.setText("");
+        }
     }
     
 }
