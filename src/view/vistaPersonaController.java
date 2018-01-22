@@ -4,11 +4,14 @@ package view;
 
 import controller.LibretaDirecciones;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.Persona;
+import util.UtilidadDeFechas;
 
 public class vistaPersonaController {
     
@@ -60,6 +63,15 @@ public class vistaPersonaController {
 
         //Añado la lista obervable a la tabla
         tablaPersonas.setItems/*Llamar al metodo get datos personas*/(libretaDirecciones.getDatosPersona());
+        
+        //Borro los detalles de la persona
+        mostrarDetallesPersona(null);
+        
+        //Escucho cambios en la selección de la tabla y muestro los detalles en caso de cambio
+        tablaPersonas.getSelectionModel().selectedItemProperty().addListener(
+        (observable, oldValue, newValue) -> mostrarDetallesPersona((Persona) newValue/*Item que he seleccionado en la tabla*/));
+        
+        
     }
     
     
@@ -74,7 +86,7 @@ public class vistaPersonaController {
             codigoPostalLabel.setText(Integer.toString(persona.getCodigoPostal()));
             ciudadLabel.setText(persona.getCiudad());
             //TODO: Tenemos que convertir la fecha de nacimiento en un String 
-            //fechaDeNacimientoLabel.setText(...);
+            fechaDeNacimientoLabel.setText(UtilidadDeFechas.formato(persona.getFechaDeNacimiento()));
         } else {
             //Persona es null, vacío todos los labels.
             nombreLabel.setText("");
@@ -85,5 +97,57 @@ public class vistaPersonaController {
             fechaDeNacimientoLabel.setText("");
         }
     }
+    
+    
+  //Borro la persona seleccionada cuando el usuario hace clic en el botón de Borrar //Controlo los errores
+    @FXML
+    private void borrarPersona() {
+        //Capturo el indice seleccionado y borro su item asociado de la tabla
+        int indiceSeleccionado = tablaPersonas.getSelectionModel().getSelectedIndex();
+        if (indiceSeleccionado >= 0){
+            //Borro item
+            tablaPersonas.getItems().remove(indiceSeleccionado);
+            
+        } else {
+            //Muestro alerta
+            Alert alerta = new Alert(AlertType.WARNING);
+            alerta.setTitle("Atención");
+            alerta.setHeaderText("Persona no seleccionada");
+            alerta.setContentText("Por favor, selecciona una persona de la tabla");
+            alerta.showAndWait();
+                        
+        }    
+    }
+    
+    //Muestro el diálogo editar persona cuando el usuario hace clic en el botón de Crear
+    @FXML
+    private void crearPersona() { //Mostrara una persona con los campos vacios men 
+        Persona temporal = new Persona();
+        boolean guardarClicked = libretaDirecciones.muestraEditarPersona(temporal);
+        if (guardarClicked) {
+            libretaDirecciones.getDatosPersona().add(temporal);
+        }
+    }
+    
+    //Muestro el diálogo editar persona cuando el usuario hace clic en el botón de Editar
+    @FXML
+    private void editarPersona() { //Va para vista controler 
+        Persona seleccionada = (Persona) tablaPersonas.getSelectionModel().getSelectedItem();
+        if (seleccionada != null) {
+            boolean guardarClicked = libretaDirecciones.muestraEditarPersona(seleccionada);
+            if (guardarClicked) {
+                mostrarDetallesPersona(seleccionada);
+            } 
+
+        } else {
+            //Muestro alerta
+            Alert alerta = new Alert(Alert.AlertType.WARNING);
+            alerta.setTitle("Alerta");
+            alerta.setHeaderText("Persona no seleccionada");
+            alerta.setContentText("Por favor, selecciona una persona");
+            alerta.showAndWait();
+        }
+    }
+
     
 }
