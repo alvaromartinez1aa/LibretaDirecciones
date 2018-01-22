@@ -96,13 +96,13 @@ public class Persona {
         return codigoPostal;
     }
 
-    /*public LocalDate getFechaDeNacimiento() {
-        return fechaDeNacimiento.get();
+    public LocalDate getFechaDeNacimiento() {
+        return (LocalDate) fechaDeNacimiento.get();
     }
 
     public void setFechaDeNacimiento(LocalDate fechaDeNacimiento) {
         this.fechaDeNacimiento.set(fechaDeNacimiento);
-    }*/
+    }
 
     public ObjectProperty fechaDeNacimientoProperty() {
         return fechaDeNacimiento;
